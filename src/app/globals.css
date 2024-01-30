@@ -1,27 +1,81 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
-@tailwind utilities;
+@tailwind utilities; */
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
+/* 基本的なフォントと背景設定 */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  background-color: white;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+  line-height: 1.6;
 }
+
+/* アプリケーションのコンテナスタイル */
+div {
+  width: 100%;
+  max-width: 600px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 8px;
+}
+
+/* フォームスタイル */
+form {
+  display: flex;
+  margin-bottom: 15px;
+}
+
+input[type="text"] {
+  flex-grow: 1;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+button {
+  padding: 12px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* ToDoリストスタイル */
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.todo-item {
+  padding: 10px;
+  border-bottom: 1px solid #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 削除されたToDoアイテムのスタイル */
+.deleted-todo-item {
+  color: #999;
+  text-decoration: line-through;
+}
+
+/* ヘッダースタイル */
+h3 {
+  color: #333;
+  margin-top: 30px;
+  font-size: 22px;
+}
+
+
