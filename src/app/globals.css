@@ -1,81 +1,73 @@
-/* @tailwind base;
-@tailwind components;
-@tailwind utilities; */
-
-/* 基本的なフォントと背景設定 */
-body {
-  font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: white;
-  color: #333;
-  margin: 0;
-  padding: 20px;
-  line-height: 1.6;
-}
-
-/* アプリケーションのコンテナスタイル */
-div {
-  width: 100%;
+/* Todoアプリの基本スタイル */
+.container {
   max-width: 600px;
-  margin: 20px auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 8px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
 }
 
-/* フォームスタイル */
 form {
   display: flex;
-  margin-bottom: 15px;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
-input[type="text"] {
+input {
   flex-grow: 1;
-  padding: 12px;
-  font-size: 14px;
+  padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
-  margin-right: 10px;
 }
 
 button {
-  padding: 12px 15px;
+  padding: 10px 15px;
   border: none;
-  background-color: #007bff;
-  color: white;
-  cursor: pointer;
   border-radius: 4px;
-  transition: background 0.3s;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  opacity: 0.9;
 }
 
-/* ToDoリストスタイル */
+/* 追加ボタンのスタイル */
+button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+}
+
+/* 編集ボタンのスタイル */
+.edit-btn {
+  background-color: #ffc107;
+  color: black;
+}
+
+/* 削除ボタンのスタイル */
+.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
 ul {
   list-style: none;
   padding: 0;
 }
 
-.todo-item {
-  padding: 10px;
-  border-bottom: 1px solid #f0f0f0;
+li {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }
 
-/* 削除されたToDoアイテムのスタイル */
 .deleted-todo-item {
-  color: #999;
   text-decoration: line-through;
 }
 
-/* ヘッダースタイル */
 h3 {
-  color: #333;
-  margin-top: 30px;
-  font-size: 22px;
+  margin-top: 40px;
 }
-
-

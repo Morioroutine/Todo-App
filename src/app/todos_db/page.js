@@ -7,7 +7,7 @@ export default async function Home() {
     <>
       {todos.map((todo, index) => (
         <div key={todo.id}>
-          <p>{todo.title}</p>
+          <p>{todo.id}:{todo.title}</p>
         </div>
       ))}
     </>

@@ -3,6 +3,7 @@
 import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 
+
 function TodoApp(){
     const {register, handleSubmit, reset } = useForm();
     const [todos, setTodos] = useState([]);
@@ -47,7 +48,7 @@ function TodoApp(){
             {renderTodoForm()}
             <ul>
                 {todos.map((todo,index) => (
-                    <li key = {index} className="todo-iten">
+                    <li key = {index} className="todo-item">
                         {todo}
                         <button onClick={() => removeTodo(index)}>done!!</button>
                         <button onClick={() => editTodo(todo,index)}>編集</button>
