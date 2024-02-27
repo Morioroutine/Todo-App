@@ -11,7 +11,7 @@ export default async function Page({
   }) {
 
     const todo = await getOne( id );
-    return <Form todo={todo} />;
+    return <Form todo={todo} />; //ページでデータを取ってクライアントコンポーネントのデータ(form)に渡している
     
   }
 

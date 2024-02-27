@@ -3,10 +3,10 @@
 import { NextPage } from "next";
 import { useForm } from "react-hook-form";
 import { update } from "@/actions/todo";
-import { deleteUser } from "@/actions/todo";
+import { remove } from "@/actions/todo";
 // delete import 
 
-const Page: NextPage = ({ todo }: { todo }) => {
+const Page: NextPage = ({ todo }: { todo: {id:number; title:string} }) => {
   const {
     register,
     handleSubmit,
@@ -25,7 +25,7 @@ const Page: NextPage = ({ todo }: { todo }) => {
 
   const onDelete = () => {
     if(window.confirm("本当に削除しますか？") ){
-      deleteUser(todo.id);
+      remove(todo.id);
       alert("削除しました");
     }
   }

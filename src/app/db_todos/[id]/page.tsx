@@ -7,6 +7,7 @@ import { create } from "@/actions/todo"
 import { useForm } from 'react-hook-form';
 import List from './list';
 import Add from './add';
+import Delete from "./delete";
 
 
 const App = () => {
@@ -14,6 +15,7 @@ const App = () => {
     <div>
       <Add />
       <List />
+      <Delete />
     </div>
   );
 };

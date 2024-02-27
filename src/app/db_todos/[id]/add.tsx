@@ -24,7 +24,7 @@ const Add: NextPage = () => {
     <form onSubmit={onSubmit}>
         <input {...register('title')} />
         <button type="submit">
-            Submit
+            登録
         </button>
     </form>
   )

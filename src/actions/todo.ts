@@ -17,7 +17,7 @@ export const update = async (data: { id: string; title: string }) => {
   });
 };
 
-export const deleteUser = async (id: string) => {
+export const remove = async (id: string) => {
   await db.todo.delete({
     where: {
       id: Number(id),
@@ -35,3 +35,9 @@ export const getOne = async (id) => {
 
   return todo;
 };//dbから1個だけレコードを引っ張ってくる
+
+export const getAll = async () => {
+  const todos = await db.todo.findMany();
+
+  return todos;
+};
