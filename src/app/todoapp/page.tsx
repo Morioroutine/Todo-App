@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { getAll } from "@/actions/todo"
 import List from './List'
 import Add from './Add';
-import Remove from './Remove';
 
 export default function Page () {
     const [todoss, setTodoss] = useState([]);
