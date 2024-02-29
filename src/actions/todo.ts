@@ -2,7 +2,7 @@
 
 import db from '@/lib/db'
 
-export const create = async (data: { title: string; }) => {
+export const create = async (data: { id: string; title: string }) => {
   await db.todo.create({ data })
 }
 
@@ -25,7 +25,6 @@ export const remove = async (id: string) => {
   });
 };
 
-
 export const getOne = async (id) => {
   const todo = await db.todo.findUnique({
     where: {
@@ -34,7 +33,7 @@ export const getOne = async (id) => {
   });
 
   return todo;
-};//dbから1個だけレコードを引っ張ってくる
+};
 
 export const getAll = async () => {
   const todos = await db.todo.findMany();

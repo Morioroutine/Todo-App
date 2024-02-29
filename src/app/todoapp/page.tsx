@@ -4,6 +4,8 @@ import React, { useEffect, useState } from 'react';
 import { getAll } from "@/actions/todo"
 import List from './List'
 import Add from './Add';
+import LoginBtn from '@/app/view/login-btn'
+
 
 export default function Page () {
     const [todoss, setTodoss] = useState([]);
@@ -19,24 +21,7 @@ export default function Page () {
     return (
     <div>
         <h1>Manage Your Todos 🚀</h1>
-        <Add />
         <List todoss={todoss} />
     </div>
     );
 }
-
-// import React from 'react';
-// import { getAll, getOne } from "@/actions/todo"
-// import List from './List'
-
-
-// export default function Page () {
-//     const todoss = getAll()
-
-//     return (
-//     <div>
-//         <h1>Hello World</h1>
-//         <List todoss={todoss} />
-//     </div>
-//         )
-// }
