@@ -71,3 +71,19 @@ li {
 h3 {
   margin-top: 40px;
 }
+
+/* UserButton.module.css */
+.userButton {
+  background-color: #0070f3; /* ボタンの背景色 */
+  color: white; /* テキスト色 */
+  padding: 10px 20px; /* パディング */
+  border: none; /* 枠線なし */
+  border-radius: 5px; /* 角丸 */
+  cursor: pointer; /* カーソルスタイル */
+  transition: background-color 0.3s ease; /* 背景色のトランジション */
+}
+
+.userButton:hover {
+  background-color: #0056b3; /* ホバー時の背景色 */
+}
+
