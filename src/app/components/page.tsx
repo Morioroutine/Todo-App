@@ -3,13 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { getAll } from "@/actions/todo"
 import List from './List'
-import { ClerkProvider } from '@clerk/nextjs'
 import Add from './Add';
 import LoginBtn from '@/app/view/login-btn'
 import RootLayout from '../layout';
 
 
-export default function Page () {
+export default function App () {
     const [todoss, setTodoss] = useState([]);
 
     useEffect(() => {

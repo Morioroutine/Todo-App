@@ -1,11 +1,11 @@
+
 import { getOne, remove, update, create } from "@/actions/todo";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
 
-const List = ({ todoss } : { todoss: Array<{ id: number; title: string }> }) => {
+const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: string }> }) => {
     
     const [button, setButton] = useState("Create");
-    const [isEdited, setIsEdited] = useState(false);
     
     const onDelete = (id:number) => {
         remove(id);
@@ -18,7 +18,6 @@ const List = ({ todoss } : { todoss: Array<{ id: number; title: string }> }) => 
         formState: { errors },
         reset,
     } = useForm({
-        // defaultValues:{title:"ToDoを入力してね"}
     })
 
     const onSubmit = handleSubmit((data: any) => {
@@ -33,7 +32,7 @@ const List = ({ todoss } : { todoss: Array<{ id: number; title: string }> }) => 
         }
     })
     
-    const onUpdate = async (id:number) => {
+    const onUpdate = async (id: number) => {
         const todo = await getOne(id);
         
         if(todo == null){
@@ -41,15 +40,13 @@ const List = ({ todoss } : { todoss: Array<{ id: number; title: string }> }) => 
         }  else {
             reset(todo)
             setButton("Update")
-            console.log(todo.id) //検証用
-            console.log(todo.title) //検証用
             }
         }
     
     const ListStyle = 
             todoss.map((todo) => (
             <div key={todo.id} style={{ display: 'flex', justifyContent: 'space-left', marginBottom: '10px'}}>
-                <p>#{todo.id} :{todo.title}</p>
+                <p>#{todo.id} :User{todo.userid}:{todo.title}</p>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onDelete(todo.id)}}>Done🚀</button>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onUpdate(todo.id)}}>Edit</button>
             </div>))
