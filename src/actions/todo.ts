@@ -1,15 +1,18 @@
 'use server'
 
+import { Today } from '@/app/components/Date';
 import db from '@/lib/db'
 import { auth, currentUser } from "@clerk/nextjs";
 
-export const create = async (data: {id: number; title: string}) => {
+export const create = async (data: {id: number; title: string; date: string}) => {
   const { userId } = auth();
+  const date = Today();
   console.log("データチェック")
   console.log(data)
   console.log(data.title)
   console.log(userId)
-  await db.todo.create({ data: {...data, userId: userId }});
+  console.log(date)
+  await db.todo.create({ data: {...data, userId: userId, date: date }});
 }
 
 export const update = async (data: { id: number; title: string }) => {
