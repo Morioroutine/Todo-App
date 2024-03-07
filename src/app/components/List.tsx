@@ -21,7 +21,10 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
     })
 
     const onSubmit = handleSubmit((data: any) => {
+
         if (data.id == null){
+            console.log(data.title)
+            console.log(data)
             create(data);
             reset();
             alert("登録しました");
@@ -46,7 +49,7 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
     const ListStyle = 
             todoss.map((todo) => (
             <div key={todo.id} style={{ display: 'flex', justifyContent: 'space-left', marginBottom: '10px'}}>
-                <p>#{todo.id} :User{todo.userid}:{todo.title}</p>
+                <p>#{todo.id} :{todo.userId}:{todo.title}</p>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onDelete(todo.id)}}>Done🚀</button>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onUpdate(todo.id)}}>Edit</button>
             </div>))

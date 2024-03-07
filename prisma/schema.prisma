@@ -11,7 +11,7 @@ datasource db {
 }
 
 model Todo {
-  id        Int     @id @default(autoincrement())
-  userid    String
-  title     String
+  id       Int      @id @default(autoincrement())
+  title    String
+  userId   String
 }
