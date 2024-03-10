@@ -48,15 +48,9 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
             }
         }
 
-    const container = {
-        display: 'flex',
-        justifyContent: 'flex-start',
-        alignItems: "center",
-        marginBottom: '10px',
-    };
     const ListStyle = 
             todoss.map((todo) => (
-            <div key={todo.id} style={container}>
+            <div key={todo.id} className="container">
                 <p className="list" >{todo.date}：{todo.title}</p>
                 <button type="button" className="doneButton" onClick={()=>{onDelete(todo.id)}}>✔︎</button>
                 <button type="button" className="editButton" onClick={()=>{onUpdate(todo.id)}}>✍️</button>

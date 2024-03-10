@@ -1,6 +1,6 @@
 button {
-  padding: 10px 15px;
-  border: none;
+  padding: 8px 12px;
+  border: 1px solid #0000CD; 
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -14,16 +14,19 @@ button:hover {
 
 form {
   display: flex;
+  align-items: center;
   margin-left:10px;
   gap: 10px;
   margin-bottom: 20px;
 }
 
 input {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  padding: 8px 12px; 
+  margin: 0; 
+  border: 1px solid #ccc; 
+  border-radius: 4px; 
+  width: 100%;
+  max-width: 400px;
 }
 
 
@@ -70,6 +73,7 @@ input {
 .logins {
   display:flex;
   align-items:center;
+  margin-left: 10px;
 }
 
 .sign {
@@ -82,5 +86,10 @@ input {
   font-size: 15px;
   margin-left: 10px;
   color:black;
+}
+
+.container {
+  display: flex;
+  margin: 5px 0px;
 }
 
