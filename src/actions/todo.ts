@@ -4,8 +4,17 @@ import { Today } from '@/app/components/Date';
 import db from '@/lib/db'
 import { auth, currentUser } from "@clerk/nextjs";
 
+
 export const create = async (data: {id: number; title: string; date: string}) => {
-  const { userId } = auth();
+  const result = auth();
+  let userId;
+
+  if (result.userId == null) {
+    userId = "ゲスト"
+  } else {
+    userId = result.userId;
+  }
+
   const date = Today();
   console.log("データチェック")
   console.log(data)
@@ -26,6 +35,7 @@ export const update = async (data: { id: number; title: string }) => {
   });
 };
 
+
 export const remove = async (id: number) => {
   await db.todo.delete({
     where: {
@@ -45,7 +55,26 @@ export const getOne = async (id) => {
 };
 
 export const getAll = async () => {
-  const todos = await db.todo.findMany();
+  const allTodos = await db.todo.findMany();
 
-  return todos;
+  return allTodos;
+};
+
+export const getCurrentAll = async () => {
+  const result = auth();
+  let userId;
+
+  if (result.userId == null) {
+    userId = "ゲスト"
+  } else {
+    userId = result.userId;
+  }
+
+  const currentTodos = await db.todo.findMany({
+    where: {
+      userId: userId,
+    }
+  });
+
+  return currentTodos
 };

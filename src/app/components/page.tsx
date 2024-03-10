@@ -1,19 +1,15 @@
-"use client"
-
 import React, { useEffect, useState } from 'react';
-import { getAll } from "@/actions/todo"
-import List from './List'
-import Add from './Add';
-import LoginBtn from '@/app/view/login-btn'
-import RootLayout from '../layout';
+import { getAll, getCurrentAll } from "@/actions/todo";
+import List from './List';
 
 
 export default function App () {
     const [todoss, setTodoss] = useState([]);
 
+
     useEffect(() => {
         const fetchData = async () => {
-            const todosData = await getAll();
+            const todosData = await getCurrentAll();
             setTodoss(todosData);
         };
         fetchData();

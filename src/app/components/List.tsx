@@ -3,6 +3,7 @@ import { getOne, remove, update, create } from "@/actions/todo";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
 import { Today } from './Date';
+import Result from "./Result";
 
 const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: string }> }) => {
     
@@ -46,10 +47,16 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
             setButton("Update")
             }
         }
+
+    const container = {
+        display: 'flex',
+        justifyContent: 'space-left',
+        marginBottom: '10px',
+    }
     
     const ListStyle = 
             todoss.map((todo) => (
-            <div key={todo.id} style={{ display: 'flex', justifyContent: 'space-left', marginBottom: '10px'}}>
+            <div key={todo.id} style={container}>
                 <p>{todo.date}：{todo.title} ({todo.userId})</p>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onDelete(todo.id)}}>Done🚀</button>
                 <button type="button" style={{marginLeft:'20px'}}onClick={()=>{onUpdate(todo.id)}}>Edit</button>
