@@ -9,53 +9,27 @@ export default function Home() {
   const [userName, setUserName] = useState("ゲストさん");
   const { isLoaded, user } = useUser();
 
-  //Style 
-  const container = {
-    margin: "10px",
-    padding: "10px",
-    display: "flex",
-    alignItems: "center",
-  };
-  const greeting = {
-    margin: "5px",
-    padding: "5px",
-  };
-  const sign = {
-    margin: "2px",
-    padding: "2px",
-  };
 
   if (isLoaded == false) {
     return <div>ローディング中</div>
   }
   if (user == null) {
     return (<>
-      <div style={container}>
-        <a href="/sign-up" style={sign}>会員登録</a>
-        <a href="/sign-in" style={sign}>ログイン</a>
-        <p style={greeting}>Hello ゲストさん!</p>
+      <div className="logins">
+        <a href="/sign-up" className="sign">会員登録</a>
+        <a href="/sign-in" className="sign">ログイン</a>
+        <p className="greeting">こんにちは、ゲストさん！</p>
       </div>
       <App />
     </>)
   } else { 
     return (
       <>
-      <div style={container}>
+      <div className="logins">
         <UserButton />
-        <p style={greeting}>Hello {user.fullName}!</p>
+        <p className="greeting">{user.fullName}'s To-Do</p>
       </div>
       <App />
       </>
     )}
-
-    
-
-  return (
-    <div style={container}>
-      <UserButton />
-      <p style={greeting}>Hello {userName}!</p>
-      <a href="/sign-up">会員登録</a>
-      <a href="/sign-in">ログイン</a>
-    </div>
-  );
 }

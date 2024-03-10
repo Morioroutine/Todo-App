@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getAll, getCurrentAll } from "@/actions/todo";
 import List from './List';
+import "../globals.css"
 
 
 export default function App () {
@@ -17,7 +18,7 @@ export default function App () {
 
     return (
     <div>
-        <h1>Manage Your Todos 🚀</h1>
+        <h1 className="title">Manage Your Todos 🚀</h1>
         <List todoss={todoss} />
     </div>
     );

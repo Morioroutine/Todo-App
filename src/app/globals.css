@@ -1,13 +1,20 @@
-/* Todoアプリの基本スタイル */
-.container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
+button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: 	#0000CD;
+  color: white;
+}
+
+button:hover {
+  opacity: 0.6;
 }
 
 form {
   display: flex;
+  margin-left:10px;
   gap: 10px;
   margin-bottom: 20px;
 }
@@ -19,71 +26,61 @@ input {
   border-radius: 4px;
 }
 
-button {
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+
+.title {
+  font-size: 30px;
+  margin-left: 10px;
+  color:black;
 }
 
-button:hover {
-  opacity: 0.9;
+.list {
+  margin: 3px ;
+  line-height: 30px;
+  margin-left: 10px;
 }
 
-/* 追加ボタンのスタイル */
-button[type="submit"] {
-  background-color: #007bff;
-  color: white;
+.doneButton {
+  margin-left: 20px;
+  color: #778899;
+  background-color: transparent;
+  border: 1px solid #778899;
+  height: 30px;
+  padding: 5px 10px;
 }
 
-/* 編集ボタンのスタイル */
-.edit-btn {
-  background-color: #ffc107;
-  color: black;
+.doneButton:hover {
+  background-color: #556b7f; 
+  color: white; 
 }
 
-/* 削除ボタンのスタイル */
-.delete-btn {
-  background-color: #dc3545;
-  color: white;
+.editButton {
+  margin-left: 10px;
+  color: #778899;
+  background-color: transparent;
+  border: 1px solid #778899;
+  height: 30px;
+  padding: 5px 10px;
 }
 
-ul {
-  list-style: none;
-  padding: 0;
+.editButton:hover {
+  background-color: #556b7f; 
+  color: white; 
 }
 
-li {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+.logins {
+  display:flex;
+  align-items:center;
 }
 
-.deleted-todo-item {
-  text-decoration: line-through;
+.sign {
+  font-size: 15px;
+  margin-left: 10px;
+  color:black;
 }
 
-h3 {
-  margin-top: 40px;
-}
-
-/* UserButton.module.css */
-.userButton {
-  background-color: #0070f3; /* ボタンの背景色 */
-  color: white; /* テキスト色 */
-  padding: 10px 20px; /* パディング */
-  border: none; /* 枠線なし */
-  border-radius: 5px; /* 角丸 */
-  cursor: pointer; /* カーソルスタイル */
-  transition: background-color 0.3s ease; /* 背景色のトランジション */
-}
-
-.userButton:hover {
-  background-color: #0056b3; /* ホバー時の背景色 */
+.greeting {
+  font-size: 15px;
+  margin-left: 10px;
+  color:black;
 }
 
