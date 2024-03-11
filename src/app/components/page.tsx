@@ -1,17 +1,26 @@
 import React, { useEffect, useState } from 'react';
-import { getAll, getCurrentAll } from "@/actions/todo";
+import { getAll, getActiveTodos, getCompletedTodos } from "@/actions/todo";
 import List from './List';
 import "../globals.css"
 
 
 export default function App () {
-    const [todoss, setTodoss] = useState([]);
+    const [activeTodos, setActiveTodos] = useState([]);
+    const [completedTodos, setCompletedTodos] = useState([]);
 
 
     useEffect(() => {
         const fetchData = async () => {
-            const todosData = await getCurrentAll();
-            setTodoss(todosData);
+            const activeTodos = await getActiveTodos();
+            setActiveTodos(activeTodos);
+        };
+        fetchData();
+    }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const completedTodos = await getCompletedTodos();
+            setCompletedTodos(completedTodos);
         };
         fetchData();
     }, []);
@@ -19,7 +28,7 @@ export default function App () {
     return (
     <div>
         <h1 className="title">Manage Your Todos 🚀</h1>
-        <List todoss={todoss} />
+        <List activeTodos={activeTodos} completedTodos={completedTodos} />
     </div>
     );
 }

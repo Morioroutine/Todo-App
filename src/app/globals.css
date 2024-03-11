@@ -36,7 +36,14 @@ input {
   color:black;
 }
 
-.list {
+.currentTodos {
+  margin: 3px ;
+  line-height: 30px;
+  margin-left: 10px;
+}
+
+.completedTodos {
+  color: #d3d3d3;
   margin: 3px ;
   line-height: 30px;
   margin-left: 10px;
@@ -70,6 +77,20 @@ input {
   color: white; 
 }
 
+.clearButton {
+  margin-left: 20px;
+  color: white;
+  background-color: #b0c4de;
+  border: 1px solid #778899;
+  height: 30px;
+  padding: 5px 10px;
+}
+
+.clearButton:hover {
+  background-color: #556b7f; 
+  color: white; 
+}
+
 .logins {
   display:flex;
   align-items:center;
@@ -90,6 +111,7 @@ input {
 
 .container {
   display: flex;
+  align-items:center;
   margin: 5px 0px;
 }
 

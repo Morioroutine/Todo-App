@@ -35,6 +35,27 @@ export const update = async (data: { id: number; title: string }) => {
   });
 };
 
+export const complete = async (id: number) => {
+  await db.todo.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      completed: true,
+    },
+  });
+};
+
+export const revive = async (id: number) => {
+  await db.todo.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      completed: false,
+    },
+  });
+};
 
 export const remove = async (id: number) => {
   await db.todo.delete({
@@ -43,6 +64,15 @@ export const remove = async (id: number) => {
     },
   });
 };
+
+export const allRemove = async (userId: string) => {
+    await db.todo.deleteMany({
+      where: {
+        userId: userId,
+        completed: true,
+      },
+    });
+  };
 
 export const getOne = async (id) => {
   const todo = await db.todo.findUnique({
@@ -60,7 +90,7 @@ export const getAll = async () => {
   return allTodos;
 };
 
-export const getCurrentAll = async () => {
+export const getActiveTodos = async () => {
   const result = auth();
   let userId;
 
@@ -70,11 +100,31 @@ export const getCurrentAll = async () => {
     userId = result.userId;
   }
 
-  const currentTodos = await db.todo.findMany({
+  const currentActiveTodos = await db.todo.findMany({
     where: {
       userId: userId,
-    }
+      completed: false,
+    },
   });
+  return currentActiveTodos
+}
 
-  return currentTodos
+  export const getCompletedTodos = async () => {
+    const result = auth();
+    let userId;
+  
+    if (result.userId == null) {
+      userId = "ゲスト"
+    } else {
+      userId = result.userId;
+    }
+  
+    const currentCompletedTodos = await db.todo.findMany({
+      where: {
+        userId: userId,
+        completed: true,
+      },  
+    });
+
+  return currentCompletedTodos
 };

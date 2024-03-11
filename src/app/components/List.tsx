@@ -1,11 +1,25 @@
 
-import { getOne, remove, update, create } from "@/actions/todo";
+import { getOne, remove, update, create, complete, allRemove, revive } from "@/actions/todo";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
-import { Today } from './Date';
 import '../globals.css'
 
-const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: string }> }) => {
+type Todo = {
+    id: number;
+    userId: string;
+    title: string;
+}
+
+
+const List = ({
+    userId, 
+    activeTodos,
+    completedTodos,
+    }: {
+    userId: string;
+        activeTodos: Array<Todo>;
+    completedTodos: Array<Todo>;
+    }) => {
     
     const [button, setButton] = useState("Create");
     
@@ -24,9 +38,6 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
 
     const onSubmit = handleSubmit((data: any) => {
         if (data.id == null){
-            console.log(data.title)
-            console.log(data)
-            console.log(Today())
             create(data);
             reset();
             alert("登録しました");
@@ -48,13 +59,41 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
             }
         }
 
-    const ListStyle = 
-            todoss.map((todo) => (
+    const onComplete = async(id:number) => {
+        await complete(id);
+        alert("Good job 🚀")
+    }
+    
+
+    const onRevive = async(id:number) => {
+        revive(id);
+        alert("死者蘇生 ☨")
+    }
+
+    const onClear = async() => {
+        const isConfirmed = window.confirm("本当に墓地を削除しますか？")
+
+        if (isConfirmed) {
+            await allRemove(userId);
+            alert ("墓地を綺麗にしました")
+        } else {
+        alert("キャンセルしました！")
+    } }
+
+    const currentTodos = 
+            activeTodos.map((todo) => (
             <div key={todo.id} className="container">
-                <p className="list" >{todo.date}：{todo.title}</p>
-                <button type="button" className="doneButton" onClick={()=>{onDelete(todo.id)}}>✔︎</button>
+                <p className="currentTodos" >{todo.date}：{todo.title}</p>
+                <button type="button" className="doneButton" onClick={()=>{onComplete(todo.id)}}>✔︎</button>
                 <button type="button" className="editButton" onClick={()=>{onUpdate(todo.id)}}>✍️</button>
             </div>))
+
+    const doneTodos = 
+            completedTodos.map((todo) => (
+                <div key={todo.id} className="container">
+                    <p className="completedTodos" >{todo.date}：{todo.title}</p>
+                    <button type="button" className="doneButton" onClick={()=>{onRevive(todo.id)}}>✝</button>
+                </div>))
 
     return (
         <div>
@@ -66,7 +105,11 @@ const List = ({ todoss } : { todoss: Array<{ id: number; userid: string; title: 
                 </button>
                 {errors.title && <p>{errors.title.message}</p>}
             </form>
-                {ListStyle}
+                {currentTodos}
+                <div className="container">
+                    <h3>倒したTodoたち</h3>
+                    <button className="clearButton" onClick={()=> {onClear()}}>墓地を綺麗に</button></div>
+                {doneTodos}
         </div>
     );
 }
