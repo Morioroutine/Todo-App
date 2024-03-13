@@ -68,7 +68,7 @@ export const allRemove = async (userId: string) => {
     });
   };
 
-export const getOne = async (id) => {
+export const getOne = async (id: number) => {
   const todo = await db.todo.findUnique({
     where: {
       id: Number(id),
