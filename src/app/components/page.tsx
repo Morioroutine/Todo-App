@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useState } from 'react';
 import { getAll, getActiveTodos, getCompletedTodos } from "@/actions/todo";
 import List from './List';
