@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAll, getActiveTodos, getCompletedTodos } from "@/actions/todo";
 import List from './List';
 import "../globals.css"
-
+import { Stopwatch } from './Stopwatch';
 
 export default function App () {
     const [activeTodos, setActiveTodos] = useState([]);
@@ -28,7 +28,9 @@ export default function App () {
     return (
     <div>
         <h1 className="title">Manage Your Todos 🚀</h1>
-        <List activeTodos={activeTodos} completedTodos={completedTodos} />
+        <Stopwatch /><br />
+        <List activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
+    
     </div>
     );
 }

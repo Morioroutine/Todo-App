@@ -7,25 +7,16 @@ import { auth, currentUser } from "@clerk/nextjs";
 
 export const create = async (data: {id: number; title: string; date: string}) => {
   const result = auth();
-  let userId;
-
-  if (result.userId == null) {
-    userId = "ゲスト"
-  } else {
-    userId = result.userId;
-  }
+  let userId = result.userId ?? "ゲスト"
 
   const date = Today();
-  console.log("データチェック")
-  console.log(data)
-  console.log(data.title)
-  console.log(userId)
-  console.log(date)
-  await db.todo.create({ data: {...data, userId: userId, date: date }});
+  const newTodo = await db.todo.create({ data: {...data, userId, date }});
+  return newTodo;
 }
 
 export const update = async (data: { id: number; title: string }) => {
-  await db.todo.update({
+  const updatedTodo = await db.todo.update({
+    
     where: {
       id: Number(data.id),
     },
@@ -33,6 +24,8 @@ export const update = async (data: { id: number; title: string }) => {
       title: data.title,
     },
   });
+  
+  return updatedTodo;
 };
 
 export const complete = async (id: number) => {
@@ -57,6 +50,7 @@ export const revive = async (id: number) => {
   });
 };
 
+//個別のremoveは使っていない
 export const remove = async (id: number) => {
   await db.todo.delete({
     where: {

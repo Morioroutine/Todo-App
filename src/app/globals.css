@@ -37,9 +37,29 @@ input {
 }
 
 .currentTodos {
-  margin: 3px ;
+  margin: 3px;
   line-height: 30px;
   margin-left: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.currentTodos:hover {
+  background-color: #f0e68c; 
+}
+
+.currentTodos.clicked {
+  background-color: #fffacd; 
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  20% { transform: translateY(-5px); }
+  40%, 100% { transform: translateY(0); }
+}
+
+.bounce {
+  animation: bounce 0.5s;
 }
 
 .completedTodos {
@@ -115,3 +135,32 @@ input {
   margin: 5px 0px;
 }
 
+.subtitle {
+  font-size: 20px;
+  margin-left: 10px;
+  color:black;
+}
+
+.timer {
+  font-size:25px;
+  margin-left: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.watchButton {
+  margin-left: 10px;
+  color: #778899; 
+  background-color: transparent; 
+  border: 0px solid #778899; 
+  height: 30px;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer; 
+  transition: all 0.3s ease; 
+}
+
+.watchButton:hover {
+  color: #fff; 
+  background-color: #778899; 
+}

@@ -1,5 +1,5 @@
 
-import { getOne, remove, update, create, complete, allRemove, revive } from "@/actions/todo";
+import { getOne, update, create, complete, allRemove, revive } from "@/actions/todo";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
 import '../globals.css'
@@ -10,23 +10,26 @@ type Todo = {
     title: string;
 }
 
-
 const List = ({
     userId, 
     activeTodos,
+    setActiveTodos,
     completedTodos,
+    setCompletedTodos,
     }: {
     userId: string;
-        activeTodos: Array<Todo>;
+    activeTodos: Array<Todo>;
     completedTodos: Array<Todo>;
     }) => {
     
     const [button, setButton] = useState("Create");
+    const [clickedId, setClickedId] = useState(null);
+    const [bouncedId, setBouncedId] = useState(null);
     
-    const onDelete = (id:number) => {
-        remove(id);
-        alert("Good Job 🚀");
-      }
+    // const onDelete = (id:number) => {
+    //     remove(id);
+    //     alert("Good Job 🚀");
+    //   }
     
     const {
         register,
@@ -36,17 +39,37 @@ const List = ({
     } = useForm({
     })
 
-    const onSubmit = handleSubmit((data: any) => {
+    const handleTodoClick = (id) => {
+        setBouncedId(id);
+        setClickedId(prevId => prevId === id ? null : id); 
+        setTimeout(() => setBouncedId(null), 500); 
+      };
+
+    const onSubmit = handleSubmit(async (data: any) => {
         if (data.id == null){
-            create(data);
+            const newTodo = await create(data);
+            if (newTodo) {
+                setActiveTodos((prevTodos) => [...prevTodos, newTodo]); 
+            } else {
+                alert("登録に失敗しました");
+            }
             reset();
-            alert("登録しました");
         } else {
-            update(data);
-            alert("更新しました")
-            reset({title:""});
+            const updatedTodo = await update(data);
+            if (updatedTodo) {
+                setActiveTodos(prevTodos => prevTodos.map(todo => {
+                    if (todo.id === Number(data.id)) {
+                        return updatedTodo;
+                    }
+                    return todo;
+                }));
+                alert("更新しました");
+                reset({ title: ""}); 
+            } else {
+                alert("更新に失敗しました");
+            }
         }
-    })
+    });
     
     const onUpdate = async (id: number) => {
         const todo = await getOne(id);
@@ -61,13 +84,19 @@ const List = ({
 
     const onComplete = async(id:number) => {
         await complete(id);
-        alert("Good job 🚀")
+        //alert("Good job 🚀")
+        setActiveTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
+        const completedTodo = activeTodos.find(todo => todo.id === id);
+        setCompletedTodos((prevTodos) => [...prevTodos, {...completedTodo,}]);
     }
     
 
     const onRevive = async(id:number) => {
-        revive(id);
-        alert("死者蘇生 ☨")
+        await revive(id);
+        //alert("死者蘇生 ☨");
+        setCompletedTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
+        const revivedTodo = completedTodos.find(todo => todo.id === id);
+        setActiveTodos((prevTodos) => [...prevTodos, {...revivedTodo,}]);
     }
 
     const onClear = async() => {
@@ -76,6 +105,7 @@ const List = ({
         if (isConfirmed) {
             await allRemove(userId);
             alert ("墓地を綺麗にしました")
+            setCompletedTodos((prevTodos) => [])
         } else {
         alert("キャンセルしました！")
     } }
@@ -83,8 +113,11 @@ const List = ({
     const currentTodos = 
             activeTodos.map((todo) => (
             <div key={todo.id} className="container">
-                <p className="currentTodos" >{todo.date}：{todo.title}</p>
-                <button type="button" className="doneButton" onClick={()=>{onComplete(todo.id)}}>✔︎</button>
+                <p 
+                className={`currentTodos ${bouncedId === todo.id ? 'bounce' : ''} ${clickedId === todo.id ? 'clicked' : ''}`}
+                onClick={() => handleTodoClick(todo.id)}
+                >{todo.date}：{todo.title}</p>
+                <button type="button" className="doneButton" onClick={()=>{onComplete(todo.id)}}>✔</button>
                 <button type="button" className="editButton" onClick={()=>{onUpdate(todo.id)}}>✍️</button>
             </div>))
 
@@ -107,7 +140,7 @@ const List = ({
             </form>
                 {currentTodos}
                 <div className="container">
-                    <h3>倒したTodoたち</h3>
+                    <h3 className="subtitle">Completed Todos!</h3>
                     <button className="clearButton" onClick={()=> {onClear()}}>墓地を綺麗に</button></div>
                 {doneTodos}
         </div>
