@@ -5,13 +5,16 @@ export const Stopwatch = () => {
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
-    let interval = null;
+    let interval:ReturnType<typeof setInterval> | undefined = undefined;
 
     if (isRunning) {
       interval = setInterval(() => {
         setTime(prevTime => prevTime + 10);
       }, 10);
     } else if (!isRunning && time !== 0) {
+      if (interval == null){
+        return
+      }
       clearInterval(interval);
     }
     return () => clearInterval(interval);

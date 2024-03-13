@@ -59,7 +59,9 @@ export const remove = async (id: number) => {
   });
 };
 
-export const allRemove = async (userId: string) => {
+export const allRemove = async () => {
+  const result = auth();
+  let userId = result.userId ?? "ゲスト"
     await db.todo.deleteMany({
       where: {
         userId: userId,

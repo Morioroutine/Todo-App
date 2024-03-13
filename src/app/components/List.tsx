@@ -8,23 +8,24 @@ type Todo = {
     id: number;
     userId: string;
     title: string;
+    date: string;
 }
 
 const List = ({
-    userId, 
     activeTodos,
     setActiveTodos,
     completedTodos,
     setCompletedTodos,
     }: {
-    userId: string;
     activeTodos: Array<Todo>;
     completedTodos: Array<Todo>;
+    setActiveTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
+    setCompletedTodos: React.Dispatch<React.SetStateAction<Array<Todo>>>;
     }) => {
     
     const [button, setButton] = useState("Create");
-    const [clickedId, setClickedId] = useState(null);
-    const [bouncedId, setBouncedId] = useState(null);
+    const [clickedId, setClickedId] = useState<number|null>(null);
+    const [bouncedId, setBouncedId] = useState<number|null>(null);
     
     // const onDelete = (id:number) => {
     //     remove(id);
@@ -36,10 +37,10 @@ const List = ({
         handleSubmit,
         formState: { errors },
         reset,
-    } = useForm({
+    } = useForm<Todo>({
     })
 
-    const handleTodoClick = (id) => {
+    const handleTodoClick = (id: number) => {
         setBouncedId(id);
         setClickedId(prevId => prevId === id ? null : id); 
         setTimeout(() => setBouncedId(null), 500); 
@@ -87,6 +88,9 @@ const List = ({
         //alert("Good job 🚀")
         setActiveTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
         const completedTodo = activeTodos.find(todo => todo.id === id);
+        if (completedTodo == null){
+            return
+        }//completedTodoにnullが入るケースを除外してあげる
         setCompletedTodos((prevTodos) => [...prevTodos, {...completedTodo,}]);
     }
     
@@ -96,6 +100,9 @@ const List = ({
         //alert("死者蘇生 ☨");
         setCompletedTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
         const revivedTodo = completedTodos.find(todo => todo.id === id);
+        if (revivedTodo == null){
+            return
+        }//同上
         setActiveTodos((prevTodos) => [...prevTodos, {...revivedTodo,}]);
     }
 
@@ -103,7 +110,7 @@ const List = ({
         const isConfirmed = window.confirm("本当に墓地を削除しますか？")
 
         if (isConfirmed) {
-            await allRemove(userId);
+            await allRemove();
             alert ("墓地を綺麗にしました")
             setCompletedTodos((prevTodos) => [])
         } else {

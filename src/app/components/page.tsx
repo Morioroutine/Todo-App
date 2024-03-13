@@ -6,9 +6,16 @@ import List from './List';
 import "../globals.css"
 import { Stopwatch } from './Stopwatch';
 
+type Todo = {
+    id: number;
+    userId: string;
+    title: string;
+    date: string;
+}
+
 export default function App () {
-    const [activeTodos, setActiveTodos] = useState([]);
-    const [completedTodos, setCompletedTodos] = useState([]);
+    const [activeTodos, setActiveTodos] = useState<Array<Todo>>([]);
+    const [completedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
 
 
     useEffect(() => {
