@@ -1,15 +1,11 @@
 
-import { getOne, update, create, complete, allRemove, revive } from "@/actions/todo";
+import { getOne, update, create, complete, allRemove, revive, isLogined } from "@/actions/todo";
 import { useState } from "react";
 import { useForm } from 'react-hook-form'
 import '../globals.css'
-
-type Todo = {
-    id: number;
-    userId: string;
-    title: string;
-    date: string;
-}
+import { Today } from "./Date";
+import  { Todo } from "../Type/todo" //型
+import { useTodoActions } from "./useTodoActions";
 
 const List = ({
     activeTodos,
@@ -27,11 +23,6 @@ const List = ({
     const [clickedId, setClickedId] = useState<number|null>(null);
     const [bouncedId, setBouncedId] = useState<number|null>(null);
     
-    // const onDelete = (id:number) => {
-    //     remove(id);
-    //     alert("Good Job 🚀");
-    //   }
-    
     const {
         register,
         handleSubmit,
@@ -43,79 +34,61 @@ const List = ({
     const handleTodoClick = (id: number) => {
         setBouncedId(id);
         setClickedId(prevId => prevId === id ? null : id); 
-        setTimeout(() => setBouncedId(null), 500); 
+        setTimeout(() => setBouncedId(null), 100); 
       };
 
-    const onSubmit = handleSubmit(async (data: any) => {
-        if (data.id == null){
-            const newTodo = await create(data);
-            if (newTodo) {
-                setActiveTodos((prevTodos) => [...prevTodos, newTodo]); 
-            } else {
-                alert("登録に失敗しました");
-            }
-            reset();
-        } else {
-            const updatedTodo = await update(data);
-            if (updatedTodo) {
-                setActiveTodos(prevTodos => prevTodos.map(todo => {
-                    if (todo.id === Number(data.id)) {
-                        return updatedTodo;
-                    }
-                    return todo;
-                }));
-                alert("更新しました");
-                reset({ title: ""}); 
-            } else {
-                alert("更新に失敗しました");
-            }
-        }
-    });
-    
-    const onUpdate = async (id: number) => {
-        const todo = await getOne(id);
+      const {  onComplete, onRevive, onClear } = useTodoActions(activeTodos, setActiveTodos, completedTodos, setCompletedTodos);
+
+      const saveTodo = async (data: any) => {
+        const loggedIn = await isLogined();
         
-        if(todo == null){
-            return 
-        }  else {
-            reset(todo)
-            setButton("Update")
-            }
-        }
-
-    const onComplete = async(id:number) => {
-        await complete(id);
-        //alert("Good job 🚀")
-        setActiveTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
-        const completedTodo = activeTodos.find(todo => todo.id === id);
-        if (completedTodo == null){
-            return
-        }//completedTodoにnullが入るケースを除外してあげる
-        setCompletedTodos((prevTodos) => [...prevTodos, {...completedTodo,}]);
-    }
+        // ログイン時：ローカル状態のみ更新
+        if (!loggedIn) {
+          if (data.id == null) {
+            const date = Today();
+            const tempId = Date.now(); // 一時的なID
     
-
-    const onRevive = async(id:number) => {
-        await revive(id);
-        //alert("死者蘇生 ☨");
-        setCompletedTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
-        const revivedTodo = completedTodos.find(todo => todo.id === id);
-        if (revivedTodo == null){
-            return
-        }//同上
-        setActiveTodos((prevTodos) => [...prevTodos, {...revivedTodo,}]);
-    }
-
-    const onClear = async() => {
-        const isConfirmed = window.confirm("本当に墓地を削除しますか？")
-
-        if (isConfirmed) {
-            await allRemove();
-            alert ("墓地を綺麗にしました")
-            setCompletedTodos((prevTodos) => [])
+            const newTodo = { ...data, date, id: tempId };
+            setActiveTodos(prevTodos => [...prevTodos, newTodo]);
+          } 
         } else {
-        alert("キャンセルしました！")
-    } }
+          // 非ログイン時：API経由でデータを作成または更新
+          try {
+            if (data.id == null) {
+              const newTodo = await create(data);
+              setActiveTodos(prevTodos => [...prevTodos, newTodo]);
+            } else {
+              const updatedTodo = await update(data);
+              setActiveTodos(prevTodos => prevTodos.map(todo => todo.id === data.id ? updatedTodo : todo));
+            }
+          } catch (error) {
+            alert("操作に失敗しました");
+          }
+        }
+        reset();
+      }
+
+      const onSubmit = handleSubmit(async (data: any) => {
+        await saveTodo(data);
+      });
+
+
+    const onUpdate = async (id: number) => {
+        let todo;
+        const loggedIn = await isLogined();
+    
+        if (loggedIn) {
+            todo = await getOne(id);
+        } else {
+            todo = activeTodos.find(todo => todo.id === id);
+        }
+        if (todo) {
+            reset(todo);
+            setButton("Update");
+        } else {
+            alert('更新するTodoが見つかりません。');
+        }
+    };
 
     const currentTodos = 
             activeTodos.map((todo) => (

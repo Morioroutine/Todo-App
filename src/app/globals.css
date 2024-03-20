@@ -145,7 +145,12 @@ input {
   font-size:25px;
   margin-left: 10px;
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+}
+
+.smallText {
+  font-size: 20px;
+  padding-bottom: 1px;
 }
 
 .watchButton {
@@ -164,3 +169,4 @@ input {
   color: #fff; 
   background-color: #778899; 
 }
+

@@ -1,27 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import '../globals.css'
 
 export const Stopwatch = () => {
   const [time, setTime] = useState(0);
   const [isRunning, setIsRunning] = useState(false);
+  const startTimeRef = useRef(0);
 
   useEffect(() => {
-    let interval:ReturnType<typeof setInterval> | undefined = undefined;
-
     if (isRunning) {
-      interval = setInterval(() => {
-        setTime(prevTime => prevTime + 10);
-      }, 10);
-    } else if (!isRunning && time !== 0) {
-      if (interval == null){
-        return
-      }
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [isRunning, time]);
+      startTimeRef.current = Date.now() - time;
+      const interval = setInterval(() => {
 
-  const startStopwatch = () => setIsRunning(true);
-  const stopStopwatch = () => setIsRunning(false);
+        setTime(Date.now() - startTimeRef.current);
+      }, 10);
+      return () => clearInterval(interval);
+    }
+  }, [isRunning]);
+
+  const startStopwatch = () => {
+    setIsRunning(true);
+  };
+
+  const stopStopwatch = () => {
+    setIsRunning(false);
+  };
+
   const resetStopwatch = () => {
     setIsRunning(false);
     setTime(0);
@@ -29,9 +32,10 @@ export const Stopwatch = () => {
 
   return (
     <div className="timer">
+      <span>{("0" + Math.floor((time / 3600000))).slice(-2)}:</span>
       <span>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
       <span>{("0" + Math.floor((time / 1000) % 60)).slice(-2)}:</span>
-      <span>{("0" + ((time / 10) % 100)).slice(-2)}</span>
+      <span className="smallText">{("0" + Math.floor((time % 1000) / 10)).slice(-2)}</span>
       <div>
         <button onClick={startStopwatch} className="watchButton">Start</button>
         <button onClick={stopStopwatch} className="watchButton"> Stop</button>

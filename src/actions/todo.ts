@@ -2,21 +2,28 @@
 
 import { Today } from '@/app/components/Date';
 import db from '@/lib/db'
-import { auth, currentUser } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs";
 
+const getUserId = async () => {
+  const result = await auth();
+  return  result.userId ?? "ゲスト"
+}
+
+export const isLogined = async () => {
+  const userId = await getUserId();
+  return userId != "ゲスト";
+}
 
 export const create = async (data: {id: number; title: string; date: string}) => {
-  const result = auth();
-  let userId = result.userId ?? "ゲスト"
-
+  const userId = await getUserId();
   const date = Today();
+  
   const newTodo = await db.todo.create({ data: {...data, userId, date }});
   return newTodo;
 }
 
 export const update = async (data: { id: number; title: string }) => {
   const updatedTodo = await db.todo.update({
-    
     where: {
       id: Number(data.id),
     },
@@ -24,44 +31,27 @@ export const update = async (data: { id: number; title: string }) => {
       title: data.title,
     },
   });
-  
   return updatedTodo;
 };
 
-export const complete = async (id: number) => {
+
+const updateCompletionStatus = async (id: number, completed: boolean) => {
   await db.todo.update({
-    where: {
-      id: Number(id),
-    },
-    data: {
-      completed: true,
-    },
+    where: { id: Number(id) },
+    data: { completed },
   });
 };
 
-export const revive = async (id: number) => {
-  await db.todo.update({
-    where: {
-      id: Number(id),
-    },
-    data: {
-      completed: false,
-    },
-  });
-};
+  export const complete = (id: number) =>
+    updateCompletionStatus(id, true);
 
-//個別のremoveは使っていない
-export const remove = async (id: number) => {
-  await db.todo.delete({
-    where: {
-      id: Number(id),
-    },
-  });
-};
+  export const revive = (id: number) =>
+    updateCompletionStatus(id, false);
+
 
 export const allRemove = async () => {
-  const result = auth();
-  let userId = result.userId ?? "ゲスト"
+  const userId = await getUserId();
+
     await db.todo.deleteMany({
       where: {
         userId: userId,
@@ -76,25 +66,11 @@ export const getOne = async (id: number) => {
       id: Number(id),
     },
   });
-
   return todo;
 };
 
-export const getAll = async () => {
-  const allTodos = await db.todo.findMany();
-
-  return allTodos;
-};
-
 export const getActiveTodos = async () => {
-  const result = auth();
-  let userId;
-
-  if (result.userId == null) {
-    userId = "ゲスト"
-  } else {
-    userId = result.userId;
-  }
+  const userId = await getUserId();
 
   const currentActiveTodos = await db.todo.findMany({
     where: {
@@ -106,14 +82,7 @@ export const getActiveTodos = async () => {
 }
 
   export const getCompletedTodos = async () => {
-    const result = auth();
-    let userId;
-  
-    if (result.userId == null) {
-      userId = "ゲスト"
-    } else {
-      userId = result.userId;
-    }
+    const userId = await getUserId();
   
     const currentCompletedTodos = await db.todo.findMany({
       where: {

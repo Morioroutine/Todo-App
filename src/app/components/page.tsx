@@ -1,45 +1,24 @@
 "use client"
 
-import React, { useEffect, useState } from 'react';
-import { getAll, getActiveTodos, getCompletedTodos } from "@/actions/todo";
+import React from 'react';
+import { useTodos } from '../hooks/useTodos';
 import List from './List';
 import "../globals.css"
 import { Stopwatch } from './Stopwatch';
 
-type Todo = {
-    id: number;
-    userId: string;
-    title: string;
-    date: string;
-}
-
 export default function App () {
-    const [activeTodos, setActiveTodos] = useState<Array<Todo>>([]);
-    const [completedTodos, setCompletedTodos] = useState<Array<Todo>>([]);
-
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const activeTodos = await getActiveTodos();
-            setActiveTodos(activeTodos);
-        };
-        fetchData();
-    }, []);
-
-    useEffect(() => {
-        const fetchData = async () => {
-            const completedTodos = await getCompletedTodos();
-            setCompletedTodos(completedTodos);
-        };
-        fetchData();
-    }, []);
+    const { activeTodos, setActiveTodos, completedTodos, setCompletedTodos } = useTodos();
 
     return (
     <div>
         <h1 className="title">Manage Your Todos 🚀</h1>
         <Stopwatch /><br />
-        <List activeTodos={activeTodos} setActiveTodos={setActiveTodos} completedTodos={completedTodos} setCompletedTodos={setCompletedTodos} />
-    
+        <List 
+        activeTodos={activeTodos}
+        setActiveTodos={setActiveTodos}
+        completedTodos={completedTodos}
+        setCompletedTodos={setCompletedTodos}
+         />
     </div>
     );
 }
