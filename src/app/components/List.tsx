@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from 'react-hook-form'
 import '../globals.css'
 import { Today } from "./Date";
-import  { Todo } from "../Type/todo" //型
+import  { Todo } from "../Type/todo" 
 import { useTodoActions } from "./useTodoActions";
 
 const List = ({
@@ -29,7 +29,10 @@ const List = ({
         formState: { errors },
         reset,
     } = useForm<Todo>({
-    })
+        defaultValues: {
+        title: "",
+        }
+    });
 
     const handleTodoClick = (id: number) => {
         setBouncedId(id);
@@ -42,30 +45,35 @@ const List = ({
       const saveTodo = async (data: any) => {
         const loggedIn = await isLogined();
         
-        // ログイン時：ローカル状態のみ更新
-        if (!loggedIn) {
+        
+        if (!loggedIn) { // 非ログイン：ローカル状態のみ更新
           if (data.id == null) {
             const date = Today();
-            const tempId = Date.now(); // 一時的なID
+            const tempId = Date.now();
     
             const newTodo = { ...data, date, id: tempId };
             setActiveTodos(prevTodos => [...prevTodos, newTodo]);
-          } 
-        } else {
-          // 非ログイン時：API経由でデータを作成または更新
+          } else {
+            setActiveTodos(prevTodos => prevTodos.map(todo =>
+                todo.id === data.id ? { ...todo, ...data } : todo
+              )
+            );
+          }
+        } else { // ログイン：DBでデータを作成または更新
           try {
             if (data.id == null) {
               const newTodo = await create(data);
               setActiveTodos(prevTodos => [...prevTodos, newTodo]);
             } else {
               const updatedTodo = await update(data);
-              setActiveTodos(prevTodos => prevTodos.map(todo => todo.id === data.id ? updatedTodo : todo));
+              setActiveTodos(prevTodos => prevTodos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo));
             }
           } catch (error) {
             alert("操作に失敗しました");
           }
         }
-        reset();
+        reset({ title: ""});
+        setButton("Create");
       }
 
       const onSubmit = handleSubmit(async (data: any) => {
