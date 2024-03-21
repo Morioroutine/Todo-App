@@ -8,7 +8,7 @@ import { Stopwatch } from './Stopwatch';
 
 export default function App () {
     const { activeTodos, setActiveTodos, completedTodos, setCompletedTodos } = useTodos();
-    console.log(useTodos)
+    console.log(useTodos().activeTodos)
 
     return (
     <div>

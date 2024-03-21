@@ -20,7 +20,7 @@ const List = ({
     }) => {
     
     const [button, setButton] = useState("Create");
-    const [clickedId, setClickedId] = useState<number|null>(null);
+    const [clickedId, setClickedId] = useState<number|null>(null); //numberかnull型かのジェネリック関数
     const [bouncedId, setBouncedId] = useState<number|null>(null);
     
     const {
@@ -40,45 +40,44 @@ const List = ({
         setTimeout(() => setBouncedId(null), 100); 
       };
 
-      const {  onComplete, onRevive, onClear } = useTodoActions(activeTodos, setActiveTodos, completedTodos, setCompletedTodos);
+    const { onComplete, onRevive, onClear } = useTodoActions(activeTodos, setActiveTodos, completedTodos, setCompletedTodos);
 
-      const saveTodo = async (data: any) => {
-        const loggedIn = await isLogined();
-        
-        
-        if (!loggedIn) { // 非ログイン：ローカル状態のみ更新
+    const saveTodo = async (data: any) => {
+      const loggedIn = await isLogined();
+
+      if (!loggedIn) { // 非ログイン：ローカル状態のみ更新
+        if (data.id == null) {
+          const date = Today();
+          const tempId = Date.now();
+  
+          const newTodo = { ...data, date, id: tempId };
+          setActiveTodos(prevTodos => [...prevTodos, newTodo]);
+        } else {
+          setActiveTodos(prevTodos => prevTodos.map(todo =>
+              todo.id === data.id ? { ...todo, ...data } : todo //dataでtodoを上書き。実質追加だが、同じプロパティは上書きされる
+            )
+          );
+        }
+      } else { // ログイン：DBでデータを作成または更新
+        try {
           if (data.id == null) {
-            const date = Today();
-            const tempId = Date.now();
-    
-            const newTodo = { ...data, date, id: tempId };
+            const newTodo = await create(data);
             setActiveTodos(prevTodos => [...prevTodos, newTodo]);
           } else {
-            setActiveTodos(prevTodos => prevTodos.map(todo =>
-                todo.id === data.id ? { ...todo, ...data } : todo
-              )
-            );
+            const updatedTodo = await update(data);
+            setActiveTodos(prevTodos => prevTodos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo));
           }
-        } else { // ログイン：DBでデータを作成または更新
-          try {
-            if (data.id == null) {
-              const newTodo = await create(data);
-              setActiveTodos(prevTodos => [...prevTodos, newTodo]);
-            } else {
-              const updatedTodo = await update(data);
-              setActiveTodos(prevTodos => prevTodos.map(todo => todo.id === updatedTodo.id ? updatedTodo : todo));
-            }
-          } catch (error) {
-            alert("操作に失敗しました");
-          }
+        } catch (error) {
+          alert("操作に失敗しました");
         }
-        reset({ title: ""});
-        setButton("Create");
       }
+      reset({ title: ""});
+      setButton("Create");
+    }
 
-      const onSubmit = handleSubmit(async (data: any) => {
-        await saveTodo(data);
-      });
+    const onSubmit = handleSubmit(async (data: any) => {
+      await saveTodo(data);
+    });
 
 
     const onUpdate = async (id: number) => {
@@ -119,7 +118,6 @@ const List = ({
     return (
         <div>
             <form onSubmit={onSubmit}>
-                {/* <input type="hidden" {...register('id')} /> */}
                 <input {...register('title', { required: 'Type Todo!' })} />
                 <button type="submit">
                     {button}
@@ -129,7 +127,7 @@ const List = ({
                 {currentTodos}
                 <div className="container">
                     <h3 className="subtitle">Completed Todos!</h3>
-                    <button className="clearButton" onClick={()=> {onClear()}}>墓地を綺麗に</button></div>
+                    <button className="clearButton" onClick={()=> {onClear()}}>Clear All</button></div>
                 {doneTodos}
         </div>
     );
