@@ -8,7 +8,9 @@ export const useTodos = () => {
 
     useEffect(() => {
         const fetchTodos = async () =>{
-            const [active, completed] = await Promise.all([getActiveTodos(), getCompletedTodos()])
+            // const [active, completed] = await Promise.all([getActiveTodos(), getCompletedTodos()])
+            const active = await getActiveTodos();
+            const completed = await getCompletedTodos();
             setActiveTodos(active);
             setCompletedTodos(completed);
         };

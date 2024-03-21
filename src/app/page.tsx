@@ -26,7 +26,7 @@ export default function Home() {
     return (
       <div className="logins">
         <UserButton />
-        <p className="greeting">{user.fullName}&apos;s To-Do</p>
+        <p className="greeting">{user.firstName}&apos;s To-Do</p>
       </div>
     );
   };
