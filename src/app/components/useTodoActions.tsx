@@ -26,14 +26,23 @@ export const useTodoActions = (
     
 
     const onRevive = async(id:number) => {
-        await revive(id);
-        setCompletedTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id));
-        const revivedTodo = completedTodos.find(todo => todo.id === id);
-        if (revivedTodo == null){
-            return
+        const loggedIn = await isLogined();
+        const stateRevive = () => {
+            setCompletedTodos((prevTodos) => prevTodos.filter(todo => todo.id !== id)); //prevTodosから特定のidを除外
+                const revivedTodo = completedTodos.find(todo => todo.id === id); //特定のidをrevivedTodoとする
+                    if (revivedTodo == null){
+                        return
+                    }
+            setActiveTodos((prevTodos) => [...prevTodos, {...revivedTodo,}]);
         }
-        setActiveTodos((prevTodos) => [...prevTodos, {...revivedTodo,}]);
-    }
+
+        if (loggedIn){ //ログイン時はdbアクセス
+        await revive(id);
+        stateRevive();
+        
+        } else {
+        stateRevive();
+        }}
 
     const onClear = async() => {
         const isConfirmed = window.confirm("本当に墓地を削除しますか？")
