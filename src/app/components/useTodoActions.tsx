@@ -1,4 +1,4 @@
-import { getOne, complete, allRemove, revive, isLogined } from "@/actions/todo";
+import { complete, allRemove, revive, isLogined } from "@/actions/todo";
 import  { Todo } from "../Type/todo" //型
 
 export const useTodoActions = (

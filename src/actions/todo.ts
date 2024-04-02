@@ -4,7 +4,7 @@ import { Today } from '@/app/components/Date';
 import db from '@/lib/db'
 import { auth } from "@clerk/nextjs";
 
-const getUserId = async () => {
+export const getUserId = async () => {
   const result = await auth();
   return  result.userId ?? "ゲスト"
 }
