@@ -17,3 +17,9 @@ model Todo {
   date     String
   completed Boolean @default(false)
 }
+
+model Subscription {
+  id        Int     @id @default(autoincrement())
+  clientId  String
+  subscriptionId String
+}
