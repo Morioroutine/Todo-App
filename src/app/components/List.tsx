@@ -20,7 +20,7 @@ const List = ({
     }) => {
     
     const [button, setButton] = useState("Create");
-    const [clickedId, setClickedId] = useState<number|null>(null); //numberかnull型かのジェネリック関数
+    const [clickedId, setClickedId] = useState<number|null>(null); 
     const [bouncedId, setBouncedId] = useState<number|null>(null);
     
     const {

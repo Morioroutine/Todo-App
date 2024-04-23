@@ -93,3 +93,15 @@ export const getActiveTodos = async () => {
 
   return currentCompletedTodos
 };
+
+export const isSubscribed = async (clientId: string) => {
+  const subscription = await db.subscription.findUnique({
+    where: {
+      clientId: clientId,
+    },
+    select: {
+      subscriptionId: true,
+    }
+  });
+  return subscription ?? false;
+};
